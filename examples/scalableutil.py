@@ -1,4 +1,4 @@
-[zhang@gator2 examples]$ more s-util.py
+'''[zhang@gator2 examples]$ more s-util.py'''
 #!/usr/bin/python
 
 """
@@ -6,7 +6,7 @@ s-util.py
 test program with clustering mode
 """
 
-m mininet.node import Node, Host, OVSSwitch, Controller
+from mininet.node import Node, Host, OVSSwitch, Controller
 from mininet.link import Link, Intf
 from mininet.net import Mininet
 from mininet.topo import LinearTopo
