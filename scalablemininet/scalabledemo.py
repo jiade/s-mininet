@@ -4,7 +4,7 @@ add by Yun Zhu, for testing our scalable mininet
 '''
 
 
-from mininet.examples.scalablemininet import MininetCluster, SwitchBinPlacer
+from mininet.scalablemininet.scalablemininet import MininetCluster, SwitchBinPlacer
 from mininet.topolib import TreeTopo
 from mininet.log import setLogLevel
 from mininet.examples.clustercli import DemoCLI as CLI
