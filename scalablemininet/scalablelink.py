@@ -1,3 +1,11 @@
+'''
+This file is scalable link source. The links are created remotely.
+SSH tunels are used to establish the remote links. In the future, 
+we plan to use more efficient GRE tunnel as well.
+
+-- By Jiade Li
+'''
+
 from mininet.node import Node, Host, OVSSwitch, Controller
 from mininet.link import Link, Intf
 from mininet.net import Mininet
