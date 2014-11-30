@@ -14,3 +14,4 @@ To run the scalable version:
 sudo -E mn --topo tree,5,2 --cluster localhost,10.227.80.157,10.227.80.158 --placement random
 3. use the command, for example, to run linear topology with scalable version and Switchbin (default) placement
 sudo -E mn --topo linear,10 --cluster localhost,10.227.80.157,10.227.80.158 
+
