@@ -2,8 +2,11 @@
 #!/usr/bin/python
 
 """
-s-util.py
-test program with clustering mode
+scalableutil.py
+
+This file defines some utility functions for testing S-Mininet
+
+Contributor: Ying Zhang
 """
 
 from mininet.node import Node, Host, OVSSwitch, Controller
@@ -12,15 +15,21 @@ from mininet.net import Mininet
 from mininet.topo import LinearTopo
 from mininet.topolib import TreeTopo
 from mininet.util import quietRun, makeIntfPair, errRun, retry
-from mininet.examples.clustercli import CLI
+from mininet.scalablemininet.scalablecli import CLI
 from mininet.log import setLogLevel, debug, info, error
 
-from mininet.examples.cluster import RemoteHost
-from mininet.examples.cluster import RemoteOVSSwitch
+from mininet.scalablemininet.scalablenode import RemoteHost
+from mininet.scalablemininet.scalablenode import RemoteOVSSwitch
+from mininet.scalablemininet.scalablemininet import MininetCluster
+from mininet.scalablemininet.scalabletopo.py import Placer
 
 remoteHosts = [ 'h2' ]
 remoteSwitches = [ 's2' ]
 remoteServer = 'ubuntu2'
+
+"""
+Define example placement for switches, hosts
+"""
 
 def HostPlacer( name, *args, **params ):
     "Custom Host() constructor which places hosts on servers"
@@ -36,12 +45,20 @@ def SwitchPlacer( name, *args, **params ):
     else:
         return RemoteOVSSwitch( name, *args, **params )
 
+"""
+Define controller
+"""
+
 def ClusterController( *args, **kwargs):
     "Custom Controller() constructor which updates its eth0 IP address"
     controller = Controller( *args, **kwargs )
     # Find out its IP address so that cluster switches can connect
     Intf( 'eth0', node=controller ).updateIP()
     return controller
+
+"""
+Test the topology
+"""
 
 def testRemoteTopo():
     "Test remote Node classes using Mininet()/Topo() API"
@@ -52,10 +69,9 @@ def testRemoteTopo():
     net.pingAll()
     net.stop()
 
-# Need to test backwards placement, where each host is on
-# a server other than its switch!! But seriously we could just
-# do random switch placement rather than completely random
-# host placement.
+"""
+Test case for cross-server hosts and switches
+"""
 
 def testRemoteSwitches():
     "Test with local hosts and remote switches"
@@ -67,14 +83,9 @@ def testRemoteSwitches():
     net.pingAll()
     net.stop()
 
-
-#
-# For testing and demo purposes it would be nice to draw the
-# network graph and color it based on server.
-
-# The MininetCluster() class integrates pluggable placement
-# functions, for maximum ease of use. MininetCluster() also
-# pre-flights and multiplexes server connections.
+"""
+Test S-Mininet cluster
+"""
 
 def testMininetCluster():
     "Test MininetCluster()"
