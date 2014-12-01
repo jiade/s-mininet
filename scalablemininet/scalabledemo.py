@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 "clusterdemo.py: demo of Mininet Cluster Edition prototype"
 
 from mininet.scalablemininet.scalablemininet import MininetCluster
@@ -10,7 +9,7 @@ from mininet.scalablemininet.scalablecli import DemoCLI as CLI
 
 def demo():
     "Simple Demo of Cluster Mode"
-    servers = [ 'localhost', 'ubuntu2', 'ubuntu3' ]
+    servers = [ 'localhost', '192.168.94.129' ]
     topo = TreeTopo( depth=3, fanout=3 )
     net = MininetCluster( topo=topo, servers=servers,
                           placement=SwitchBinPlacer )

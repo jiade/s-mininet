@@ -30,6 +30,9 @@ import re
 
 from distutils.version import StrictVersion
 
+#added by Yun
+from mininet.scalablemininet.scalablelink import RemoteLink
+
 class RemoteMixin( object ):
     # Super class for all types of nodes
     # define ssh options

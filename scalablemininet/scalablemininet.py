@@ -121,9 +121,9 @@ class MininetCluster( Mininet ):
 
 
     def placeNodes( self ):
-      '''this is the key function. '''
-        """Place nodes on servers (if they don't have a server), and
-           start shell processes"""
+	'''this is the key function. 
+        Place nodes on servers (if they don't have a server), and
+           start shell processes'''
         if not self.servers or not self.topo:
             # No shirt, no shoes, no service
             return
