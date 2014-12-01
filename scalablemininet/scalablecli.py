@@ -1,8 +1,13 @@
-__author__ = 'changguo'
-
 #!/usr/bin/python
 
-"CLI for Scalable Mininet prototype"
+"""
+scalablecli.py
+This file is CLI for Scalable Mininet prototype demo. It defines some basic motheds 
+to plot a graph of hosts and switches, which can use different colors.
+
+Contributor: Chang Guo
+"""
+
 
 from mininet.cli import CLI
 from mininet.log import output, error
