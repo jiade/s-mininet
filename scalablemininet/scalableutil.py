@@ -20,7 +20,7 @@ from mininet.log import setLogLevel, debug, info, error
 
 from mininet.scalablemininet.scalablenode import RemoteHost
 from mininet.scalablemininet.scalablenode import RemoteOVSSwitch
-from mininet.scalablemininet.scalablemininet import MininetCluster
+from mininet.scalablemininet.scalablenet import MininetCluster
 from mininet.scalablemininet.scalabletopo.py import Placer
 
 remoteHosts = [ 'h2' ]
