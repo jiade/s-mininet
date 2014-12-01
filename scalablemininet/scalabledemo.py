@@ -9,8 +9,8 @@ from mininet.scalablemininet.scalablecli import DemoCLI as CLI
 
 def demo():
     "Simple Demo of Cluster Mode"
-    servers = [ 'localhost', '192.168.94.129' ]
-    topo = TreeTopo( depth=3, fanout=3 )
+    servers = [ 'localhost', '192.168.37.129' ]
+    topo = TreeTopo( depth=3, fanout=2 )
     net = MininetCluster( topo=topo, servers=servers,
                           placement=SwitchBinPlacer )
     net.start()

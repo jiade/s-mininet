@@ -37,11 +37,23 @@ from mininet.util import buildTopo
 
 from functools import partial
 
+
+'''
 # Experimental! cluster edition prototype
 from mininet.examples.cluster import ( MininetCluster, RemoteHost,
                                        RemoteOVSSwitch, RemoteLink,
                                        SwitchBinPlacer, RandomPlacer )
 from mininet.examples.clustercli import DemoCLI as ClusterCLI
+'''
+# Scalable Mininet by Jiade Li
+from mininet.scalablemininet.scalablemininet import MininetCluster
+from mininet.scalablemininet.scalablenode import (RemoteHost,
+                                       RemoteOVSSwitch)
+from mininet.scalablemininet.scalablelink import RemoteLink
+
+from mininet.scalablemininet.scalabletopo import (SwitchBinPlacer, RandomPlacer )
+from mininet.scalablemininet.scalablecli import DemoCLI as ClusterCLI
+
 
 PLACEMENT = { 'block': SwitchBinPlacer, 'random': RandomPlacer }
 
@@ -303,8 +315,8 @@ class MininetRunner( object ):
         Net = MininetWithControlNet if inNamespace else Mininet
         cli = ClusterCLI if cluster else CLI
         if cluster:
-            warn( '*** WARNING: Experimental cluster mode!\n'
-              '*** Using RemoteHost, RemoteOVSSwitch, RemoteLink\n' )
+            warn( '*** Scalable Mininet mode!\n'
+              '*** Using Scalable Mininet components by T6-ScalableMininet\n' )
             host, switch, link = RemoteHost, RemoteOVSSwitch, RemoteLink
             Net = partial( MininetCluster, servers=cluster.split( ',' ),
                            placement=PLACEMENT[ self.options.placement ] )
