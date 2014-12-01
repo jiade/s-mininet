@@ -86,13 +86,6 @@ several new features, including:
 
 * Support for multiple `--custom` arguments to `mn`
 
-* Experimental cluster support - consult the 
-  [documentation](http://docs.mininet.org) for details -
-  as well as `examples/cluster.py` and an experimental `--cluster`
-  option for topologies built with the default `Host` and `OVSSwitch`
-  classes:
-
-  `mn --cluster localhost,server1,server2`
 
 Note that examples contain experimental features which might
 "graduate" into mainline Mininet in the future, but they should 
