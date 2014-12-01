@@ -1,17 +1,25 @@
 #!/usr/bin/python
 """
-s-node.py
-The cluster version of node module. 
-The communication among remote nodes are through ssh tunnel
+scalablenode.py
+
+This file is an externsion of mininet/node.py. It is the super class 
+for host, switch controller modules. It defines the interface for
+remote hosts, switches, and controllers.  
+The communications among remote nodes are through ssh tunnel
+
+Contributor: Ying Zhang
 """
+
 from mininet.node import Node, Host, OVSSwitch, Controller
 from mininet.link import Link, Intf
 from mininet.net import Mininet
 from mininet.topo import LinearTopo
 from mininet.topolib import TreeTopo
 from mininet.util import quietRun, makeIntfPair, errRun, retry
-from mininet.examples.clustercli import CLI
+from mininet.scalablemininet.scalablecli import CLI
 from mininet.log import setLogLevel, debug, info, error
+
+from mininet.scalablemininet.scalablecli import CLI
 
 from signal import signal, SIGINT, SIG_IGN
 from subprocess import Popen, PIPE, STDOUT
@@ -23,34 +31,29 @@ import re
 from distutils.version import StrictVersion
 
 class RemoteMixin( object ):
-
-    # ssh base command
-    # -q: don't print stupid diagnostic messages
-    # BatchMode yes: don't ask for password
-    # ForwardAgent yes: forward authentication credentials
+    # Super class for all types of nodes
+    # define ssh options
 
     sshbase = [ 'ssh', '-q',
                 '-o', 'BatchMode=yes',
                 '-o', 'ForwardAgent=yes', '-tt' ]
 
+    # initialize a remote node with node name, and remote server, IP, controlPath, optional
+
     def __init__( self, name, server='localhost', user=None, serverIP=None,
                   controlPath=False, splitInit=False, **kwargs):
-        """Instantiate a remote node
-           name: name of remote node
-           server: remote server (optional)
-           user: user on remote server (optional)
-           controlPath: specify shared ssh control path (optional)
-           splitInit: split initialization?
-           **kwargs: see Node()"""
-        # We connect to servers by IP address
+        # If it is a remote server, connect using IP address
         self.server = server if server else 'localhost'
         self.serverIP = serverIP if serverIP else self.findServerIP( self.server )
         self.user = user if user else self.findUser()
+
         if controlPath is True:
             # Set a default control path for shared SSH connections
             controlPath = '/tmp/mn-%r@%h:%p'
         self.controlPath = controlPath
         self.splitInit = splitInit
+
+        # if remote server, set the destination IP address and the controlpath
         if self.user and self.server != 'localhost':
             self.dest = '%s@%s' % ( self.user, self.serverIP )
             self.sshcmd = [ 'sudo', '-E', '-u', self.user ] + self.sshbase
@@ -85,7 +88,7 @@ class RemoteMixin( object ):
     @classmethod
     def findServerIP( cls, server ):
         "Return our server's IP address"
-        # First, check for an IP address
+        # If we can match the IP
         ipmatch = cls._ipMatchRegex.findall( server )
         if ipmatch:
             return ipmatch[ 0 ]
@@ -95,7 +98,7 @@ class RemoteMixin( object ):
         ip = ips[ 0 ] if ips else None
         return ip
 
-    # Command support via shell process in namespace
+    # Start user-level shell process, if it is remote host, start remote process
     def startShell( self, *args, **kwargs ):
         "Start a shell process for running commands"
         if self.isRemote:
@@ -119,15 +122,8 @@ class RemoteMixin( object ):
         return self._popen( *cmd, **params )
 
     def rcmd( self, *cmd, **opts):
-        """rcmd: run a command on underlying server
-           in root namespace
-           args: string or list of strings
-           returns: stdout and stderr"""
+        # Interface for user command with options, using system command popen
         popen = self.rpopen( *cmd, **opts )
-        # print 'RCMD: POPEN:', popen
-        # These loops are tricky to get right.
-        # Once the process exits, we can read
-        # EOF twice if necessary.
         result = ''
         while True:
             poll = popen.poll()
@@ -142,10 +138,7 @@ class RemoteMixin( object ):
         os.setpgrp()
 
     def _popen( self, cmd, sudo=True, tt=True, **params):
-        """Spawn a process on a remote node
-            cmd: remote command to run (list)
-            **params: parameters to Popen()
-            returns: Popen() object"""
+        # Initiate a process on on remote node with the command and options
         if type( cmd ) is str:
             cmd = cmd.split()
         if self.isRemote:
@@ -154,7 +147,6 @@ class RemoteMixin( object ):
             if tt:
                 cmd = self.sshcmd + cmd
             else:
-                # Hack: remove -tt
                 sshcmd = list( self.sshcmd )
                 sshcmd.remove( '-tt' )
                 cmd = sshcmd + cmd
@@ -201,8 +193,4 @@ class RemoteOVSSwitch( RemoteMixin, OVSSwitch ):
 
 if __name__ == '__main__':
     setLogLevel( 'info' )
-    # testRemoteTopo()
-    # testRemoteNet()
-    # testMininetCluster()
-    # testRemoteSwitches()
     signalTest()
