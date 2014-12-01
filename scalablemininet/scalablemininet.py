@@ -23,6 +23,12 @@ import re
 
 from distutils.version import StrictVersion
 
+#following are to import needed module wirtten by ourselves.
+from mininet.scalablemininet.scalablenode import RemoteMixin, RemoteHost, RemoteOVSSwitch, RemoteNode
+from mininet.scalablemininet.scalablelink import RemoteLink
+from mininet.scalablemininet.scalabletopo import Placer, RandomPlacer, RoundRobinPlacer,SwitchBinPlacer, HostSwitchBinPlacer
+
+
 
 class MininetCluster( Mininet ):
 
